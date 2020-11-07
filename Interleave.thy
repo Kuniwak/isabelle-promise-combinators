@@ -60,75 +60,12 @@ lemma list_double_induct[rule_format]: "P [] [] \<longrightarrow> (\<forall>x xs
   done
 
 
-lemma "\<forall>xs ys. interleave xs ys zs \<longrightarrow> interleave (map f ys) (map f xs) (map f zs)"
+lemma interleave_mapI[rule_format]: "\<forall>xs ys. interleave xs ys zs \<longrightarrow> interleave (map f ys) (map f xs) (map f zs)"
   apply(induct_tac zs)
   apply(force elim: interleave_Free_Free_NilE)
   apply(clarsimp)
   apply(erule interleave_Free_Free_ConsE)
   apply(auto)
   done
-
-
-lemma "\<lbrakk>
-  (z1 = x1 \<and> z2 = x2 \<and> z3 = y1 \<and> z4 = y2) \<or>
-  (z1 = x1 \<and> z2 = y1 \<and> z3 = x2 \<and> z4 = y2) \<or>
-  (z1 = x1 \<and> z2 = y1 \<and> z3 = y2 \<and> z4 = x2) \<or>
-  (z1 = y1 \<and> z2 = x1 \<and> z3 = y2 \<and> z4 = x2) \<or>
-  (z1 = y1 \<and> z2 = x1 \<and> z3 = x2 \<and> z4 = y2) \<or>
-  (z1 = y1 \<and> z2 = y2 \<and> z3 = x1 \<and> z4 = x2) \<rbrakk> \<Longrightarrow> interleave [x1, x2] [y1, y2] [z1, z2, z3, z4]"
-  apply(auto)
-  apply(rule)+
-  done
-
-
-lemma "interleave [x1, x2] [y1, y2] [z1, z2, z3, z4] \<Longrightarrow>
-  (z1 = x1 \<and> z2 = x2 \<and> z3 = y1 \<and> z4 = y2) \<or>
-  (z1 = x1 \<and> z2 = y1 \<and> z3 = x2 \<and> z4 = y2) \<or>
-  (z1 = x1 \<and> z2 = y1 \<and> z3 = y2 \<and> z4 = x2) \<or>
-  (z1 = y1 \<and> z2 = x1 \<and> z3 = y2 \<and> z4 = x2) \<or>
-  (z1 = y1 \<and> z2 = x1 \<and> z3 = x2 \<and> z4 = y2) \<or>
-  (z1 = y1 \<and> z2 = y2 \<and> z3 = x1 \<and> z4 = x2)"
-  apply(erule interleave_Cons_Cons_ConsE)
-  apply(erule interleave_Cons_Cons_ConsE)
-  apply(erule interleave_Nil_Free_FreeE)
-  apply(force)
-  apply(erule interleave_Nil_Free_FreeE)
-  apply(force)
-  apply(force)
-  apply(erule interleave_Cons_Cons_ConsE)
-  apply(erule interleave_Nil_Free_FreeE)
-  apply(force)
-  apply(simp)
-  apply(erule interleave_Free_Nil_FreeE)
-  apply(force)
-  apply(simp)
-  apply(erule interleave_Cons_Cons_ConsE)
-  apply(simp)
-  apply(erule interleave_Cons_Cons_ConsE)
-  apply(simp)
-  apply(erule interleave_Nil_Free_FreeE)
-  apply(force)
-  apply(simp)
-  apply(erule interleave_Free_Nil_FreeE)
-  apply(force)
-  apply(simp)
-  apply(erule interleave_Free_Nil_FreeE)
-  apply(force)
-  apply(simp)
-  apply(elim conjE)
-  apply(erule interleave_Free_Nil_FreeE)
-  apply(force)
-  apply(simp)
-  done
-
-
-lemma [rule_format]: "interleave [x1, x2] [y1] [x1, x2, y1]"
-  apply(rule)+
-  done
-
-
-lemma "\<lbrakk> x2 \<noteq> y1; x1 \<noteq> y1 \<rbrakk> \<Longrightarrow> \<not>interleave [y1, x2] [x1] [x1, x2, y1]"
-  apply(auto)
-  by (metis distinct_length_2_or_more distinct_singleton interleave_Free_Free_ConsE list.inject)
 
 end
