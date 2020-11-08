@@ -383,7 +383,7 @@ theorem Race2R_events: "
 theorem "(
   (Race2 (Tuple
     (All2 (Tuple (Pending (Num 1) (Num 0)) (Pending (Num 1) (Num 0))))
-    (All2 (Tuple (Pending (Num 1) (Num 0)) PendingForever))
+    (All2 (Tuple (Pending (Num 1) (Num 0)) (Pending (Num 2) (Num 0))))
   )), []) \<Rightarrow>
   (Resolve (Tuple (Num 1) (Num 1)), [EventResolve (Num 1)]@[EventResolve (Num 1)])
 "
@@ -392,6 +392,21 @@ theorem "(
   apply(simp add: interleave_single_single)
   apply(rule)+
   apply(simp add: interleave_right_neutral)
+  done
+
+
+theorem "(
+  (Race2 (Tuple
+    (All2 (Tuple (Pending (Num 1) (Num 0)) (Pending (Num 1) (Num 0))))
+    (All2 (Tuple (Pending (Num 1) (Num 0)) (Pending (Num 2) (Num 0))))
+  )), []) \<Rightarrow>
+  (Resolve (Tuple (Num 1) (Num 2)), [EventResolve (Num 2)]@[EventResolve (Num 1)])
+"
+  apply(rule UF_Race2ResolveI2)
+  apply(rule)+
+  apply(simp add: interleave_left_neutral)
+  apply(rule)+
+  apply(auto)
   done
 
 
