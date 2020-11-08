@@ -5,9 +5,15 @@ definition self_inv :: "('a \<Rightarrow> 'a) \<Rightarrow> bool" where
   "self_inv f \<equiv> \<forall>x. f (f x) = x"
 
 
-lemma self_inv_self_inv_iff: "self_inv f \<Longrightarrow> f (f x) = x"
+lemma self_inv_self_inv_iff[rule_format]: "self_inv f \<Longrightarrow> f (f x) = x"
   apply(unfold self_inv_def)
   apply(force)
+  done
+
+
+lemma self_inv_comp: "self_inv f \<Longrightarrow> f \<circ> f = id"
+  apply(unfold self_inv_def)
+  apply(auto)
   done
 
 
@@ -53,5 +59,28 @@ lemma lt_length_append_iff[rule_format]: "i < length xs \<longrightarrow> P ((xs
 lemma map_self_inv: "self_inv f \<Longrightarrow> self_inv (map f)"
   apply(unfold self_inv_def)
   apply(auto iff:lt_length_append_iff)
+  done
+
+
+lemma rev_self_inv: "self_inv rev"
+  apply(unfold self_inv_def)
+  apply(auto)
+  done
+
+
+lemma self_inv_image_subsetI: "\<lbrakk> self_inv f; x \<subseteq> y; fx = f ` x \<rbrakk> \<Longrightarrow> fx \<subseteq> f ` y"
+  apply(frule self_inv_bij)
+  apply(unfold self_inv_def)
+  apply(auto)
+  done
+
+
+lemma image_self_inv: "self_inv f \<Longrightarrow> self_inv (image f)"
+  apply(unfold self_inv_def)
+  apply(subst image_comp)
+  apply(subst self_inv_comp)
+  apply(unfold self_inv_def)
+  apply(assumption)
+  apply(force)
   done
 end
